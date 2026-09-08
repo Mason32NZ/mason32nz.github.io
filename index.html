@@ -8,11 +8,25 @@
         <title>Mason Galland - Full Stack .NET Developer</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css"/>
         <link rel="stylesheet" href="style.css"/>
+        <script>
+            // Apply the saved theme before first paint to avoid a flash of the wrong theme.
+            (function () {
+                var theme;
+                // localStorage can throw in sandboxed contexts; fall back below.
+                try { theme = localStorage.getItem("theme"); } catch (e) { theme = null; }
+                // No saved choice: follow the OS preference.
+                if (theme !== "dark" && theme !== "light") {
+                    theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                }
+                document.documentElement.setAttribute("data-theme", theme);
+            })();
+        </script>
     </head>
     <body>
         <div class="page">
             <div class="accent-bar"></div>
             <header class="masthead">
+                <button class="theme-toggle" type="button" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false"><i class="fas fa-moon" aria-hidden="true"></i></button>
                 <h1>Mason Galland</h1>
                 <p class="role">Full Stack .NET Developer</p>
                 <div class="stack">
@@ -233,5 +247,26 @@
                 </main>
             </div>
         </div>
+        <script>
+            // Dark mode toggle: swaps the theme, persists the choice, and keeps icon/state in sync.
+            (function () {
+                var button = document.querySelector(".theme-toggle");
+                var icon = button.querySelector("i");
+                function apply(theme) {
+                    // data-theme drives all color overrides in style.css.
+                    document.documentElement.setAttribute("data-theme", theme);
+                    try { localStorage.setItem("theme", theme); } catch (e) { }
+                    // moon invites switching to dark; sun invites switching back to light.
+                    icon.classList.toggle("fa-moon", theme === "light");
+                    icon.classList.toggle("fa-sun", theme === "dark");
+                    button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+                }
+                // Sync the button with the theme chosen by the head script.
+                apply(document.documentElement.getAttribute("data-theme") || "light");
+                button.addEventListener("click", function () {
+                    apply(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+                });
+            })();
+        </script>
     </body>
 </html>

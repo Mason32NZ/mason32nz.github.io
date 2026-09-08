@@ -3,6 +3,7 @@
 ## Project Shape
 - This is a static personal CV site served from the repository root, not a Node or framework app.
 - `index.html` is the only page; the site CSS lives in the root `style.css`, linked with a relative path so it works both on GitHub Pages and when served locally.
+- A dependency-free vanilla JS dark-mode toggle persists the visitor's choice in `localStorage` under the `theme` key, falling back to `prefers-color-scheme`. Dark colors are defined under `html[data-theme="dark"]` in `style.css`; the toggle button sits in the masthead's top-right corner (absolutely positioned, opposite the name), and printing always renders the light theme.
 - `CNAME` pins the GitHub Pages custom domain to `cv.m32.nz`; do not remove it when changing site files.
 - `robots.txt` disallows all crawlers, and `index.html` also has `NOINDEX, NOFOLLOW`; preserve that privacy posture unless asked otherwise.
 
